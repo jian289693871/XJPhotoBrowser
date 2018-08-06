@@ -20,8 +20,8 @@
 
 #define XJPhotoBrowserImageViewMargin 10
 #define kRotateAnimationDuration 0.35f
-#define XJPhotoBrowserShowImageAnimationDuration 0.35f
-#define XJPhotoBrowserHideImageAnimationDuration 0.35f
+#define XJPhotoBrowserShowImageAnimationDuration 0.25f
+#define XJPhotoBrowserHideImageAnimationDuration 0.25f
 
 @interface XJPhotoBrowser()
 @property (nonatomic,strong) UITapGestureRecognizer *singleTap;
@@ -424,12 +424,13 @@
     
     self.window.windowLevel = UIWindowLevelNormal;//显示状态栏
     [UIView animateWithDuration:XJPhotoBrowserHideImageAnimationDuration animations:^{
-        if (!CGRectIsEmpty(photo.sourceFrame)) {
+        if (CGRectIsEmpty(photo.sourceFrame)) {
+            self.tempView.alpha = 0;
+        } else {
             self.tempView.transform = CGAffineTransformInvert(self.transform);
+            self.tempView.frame = targetTemp;
         }
-
         self.coverView.alpha = 0;
-        self.tempView.frame = targetTemp;
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
         [self.tempView removeFromSuperview];
