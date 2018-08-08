@@ -23,10 +23,11 @@
 #define XJPhotoBrowserShowImageAnimationDuration 0.25f
 #define XJPhotoBrowserHideImageAnimationDuration 0.25f
 
-@interface XJPhotoBrowser()
+@interface XJPhotoBrowser() <UIActionSheetDelegate>
 @property (nonatomic,strong) UITapGestureRecognizer *singleTap;
 @property (nonatomic,strong) UITapGestureRecognizer *doubleTap;
 @property (nonatomic,strong) UIPanGestureRecognizer *pan;
+@property (nonatomic,strong) UILongPressGestureRecognizer *longPress;
 @property (nonatomic,strong) UIImageView *tempView;
 @property (nonatomic,strong) UIView *coverView;
 @property (nonatomic,strong) UILabel *tipLabel;
@@ -68,6 +69,7 @@
     [self addGestureRecognizer:self.singleTap];
     [self addGestureRecognizer:self.doubleTap];
     [self addGestureRecognizer:self.pan];
+    [self addGestureRecognizer:self.longPress];
     self.photoBrowserView = _scrollView.subviews[self.currentPhotoIndex];
 }
 
@@ -135,6 +137,12 @@
     return _pan;
 }
 
+- (UILongPressGestureRecognizer *)longPress {
+    if (!_longPress) {
+        _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPresss:)];
+    }
+    return _longPress;
+}
 
 - (UIImageView *)tempView{
     if (!_tempView) {
@@ -224,17 +232,17 @@
     }
     
     // 2.保存按钮
-    UIButton *saveButton = [[UIButton alloc] init];
-    [saveButton setTitle:@"保存" forState:UIControlStateNormal];
-    [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    saveButton.layer.borderWidth = 0.1;
-    saveButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    saveButton.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
-    saveButton.layer.cornerRadius = 2;
-    saveButton.clipsToBounds = YES;
-    [saveButton addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
-    _saveButton = saveButton;
-    [self addSubview:saveButton];
+//    UIButton *saveButton = [[UIButton alloc] init];
+//    [saveButton setTitle:@"保存" forState:UIControlStateNormal];
+//    [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    saveButton.layer.borderWidth = 0.1;
+//    saveButton.layer.borderColor = [UIColor whiteColor].CGColor;
+//    saveButton.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
+//    saveButton.layer.cornerRadius = 2;
+//    saveButton.clipsToBounds = YES;
+//    [saveButton addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
+//    _saveButton = saveButton;
+//    [self addSubview:saveButton];
 }
 
 //保存图像
@@ -562,6 +570,13 @@
     }
 }
 
+- (void)didLongPresss:(UILongPressGestureRecognizer *)gesture {
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString(@"取消", nil) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"保存图片", nil), nil];
+        [actionSheet showInView:self];
+    }
+}
+
 #pragma mark public methods
 - (void)show {
     _contentView = [[UIView alloc] init];
@@ -584,4 +599,10 @@
     [self performSelector:@selector(onDeviceOrientationChangeWithObserver) withObject:nil afterDelay:XJPhotoBrowserShowImageAnimationDuration + 0.2];
 }
 
+#pragma mark - Delegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [self saveImage];
+    }
+}
 @end

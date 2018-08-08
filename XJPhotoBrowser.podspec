@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "XJPhotoBrowser"
-  s.version      = "1.1.0"
+  s.version      = "1.1.2"
   s.summary      = "Photo Browser"
   s.homepage     = "https://github.com/jian289693871/XJPhotoBrowser"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
