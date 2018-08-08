@@ -13,9 +13,8 @@
 @property (nonatomic, strong, readonly) UIImage *thumbImage;
 // 原图，不可为空，类型限定<UIImage、NSString、NSURL>
 @property (nonatomic, strong, readonly) id orginImage;
-// 图片起始加载位置
-@property (nonatomic, assign, readonly) CGRect sourceFrame;
-
+// 起始图片
+@property (nonatomic, strong, readonly) UIImageView *sourceImageView;
 
 /**
  创建photo对象，不带sourceFrame
@@ -28,13 +27,12 @@
 
 
 /**
- 创建photo对象，带sourceFrame
+ 创建photo对象，带sourceImageView
 
  @param image 原图，不可为空，类型限定<UIImage、NSString、NSURL>
- @param thumbImage 缩略图，不可为空，一般为UIImageView的image
- @param sourceFrame 图片起始加载位置，坐标为转换后的frame
+ @param sourceImageView 起始图片的view
  @return photo对象
  */
-+ (XJPhoto *)photoWithOrginImage:(id __nonnull)image thumbImage:(UIImage *__nonnull)thumbImage sourceFrame:(CGRect)sourceFrame;
++ (XJPhoto *)photoWithOrginImage:(id __nonnull)image sourceImageView:(UIImageView *__nullable)sourceImageView;
 
 @end

@@ -11,7 +11,7 @@
 @interface XJPhoto ()
 @property (nonatomic, strong) UIImage *thumbImage;
 @property (nonatomic, strong) id orginImage;
-@property (nonatomic, assign) CGRect sourceFrame;
+@property (nonatomic, strong) UIImageView *sourceImageView;
 @end
 
 @implementation XJPhoto
@@ -19,15 +19,17 @@
     XJPhoto *photo = [[XJPhoto alloc] init];
     photo.orginImage = image;
     photo.thumbImage = thumbImage;
-    photo.sourceFrame = CGRectZero;
+    photo.sourceImageView = nil;
     return photo;
 }
 
-+ (XJPhoto *)photoWithOrginImage:(id)image thumbImage:(UIImage *)thumbImage sourceFrame:(CGRect)sourceFrame {
++ (XJPhoto *)photoWithOrginImage:(id)image sourceImageView:(UIImageView *)sourceImageView {
     XJPhoto *photo = [[XJPhoto alloc] init];
-    photo.orginImage = image;
-    photo.thumbImage = thumbImage;
-    photo.sourceFrame = sourceFrame;
+    photo.sourceImageView = sourceImageView;
+    if ([sourceImageView isKindOfClass:UIImageView.class]) {
+        photo.orginImage = image;
+        photo.thumbImage = sourceImageView.image;
+    }
     return photo;
 }
 @end

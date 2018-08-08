@@ -26,8 +26,10 @@
 
 
 - (void)logoTap {
+    CGRect rect = [self.view convertRect:self.logoImageView.frame fromView:self.logoImageView.superview];
+    NSLog(@"01-------%@", NSStringFromCGRect(rect));
     XJPhoto *photo1 = [XJPhoto photoWithOrginImage:@"http://ww2.sinaimg.cn/bmiddle/677febf5gw1erma104rhyj20k03dz16y.jpg" thumbImage:nil];
-    XJPhoto *photo2 = [XJPhoto photoWithOrginImage:[UIImage imageNamed:@"test.jpg"] thumbImage:self.logoImageView.image sourceFrame:self.logoImageView.frame];
+    XJPhoto *photo2 = [XJPhoto photoWithOrginImage:[UIImage imageNamed:@"test.jpg"] sourceImageView:self.logoImageView];
     XJPhoto *photo3 = [XJPhoto photoWithOrginImage:[NSURL URLWithString:@"http://ww2.sinaimg.cn/bmiddle/677febf5gw1erma104rhyj20k03dz16y.jpg"] thumbImage:nil];
     XJPhoto *photo4 = [XJPhoto photoWithOrginImage:[NSNumber numberWithBool:YES] thumbImage:nil];
     

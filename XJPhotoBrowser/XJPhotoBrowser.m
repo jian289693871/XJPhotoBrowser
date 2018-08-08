@@ -355,20 +355,20 @@
 - (void)showFirstImage {
     self.userInteractionEnabled = NO;
     XJPhoto *photo = self.photos[self.currentPhotoIndex];
-    if (!CGRectIsEmpty(photo.sourceFrame) && photo.thumbImage) {
-        CGRect rect = photo.sourceFrame;
+    if (photo.sourceImageView) {
+        CGRect rect = [self convertRect:photo.sourceImageView.frame fromView:photo.sourceImageView.superview];
         UIImageView *tempView = [[UIImageView alloc] init];
         tempView.frame = rect;
         tempView.image = photo.thumbImage;
         [self addSubview:tempView];
         tempView.contentMode = UIViewContentModeScaleAspectFit;
-
+        
         CGFloat placeImageSizeW = tempView.image.size.width;
         CGFloat placeImageSizeH = tempView.image.size.height;
         CGRect targetTemp;
         CGFloat selfW = self.frame.size.width;
         CGFloat selfH = self.frame.size.height;
-
+        
         CGFloat placeHolderH = (placeImageSizeH * selfW)/placeImageSizeW;
         if (placeHolderH <= selfH) {
             targetTemp = CGRectMake(0, (selfH - placeHolderH) * 0.5 , selfW, placeHolderH);
@@ -416,20 +416,19 @@
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     
     XJPhoto *photo = self.photos[self.currentPhotoIndex];
-    if (CGRectIsEmpty(photo.sourceFrame)) {
+    if (!photo.sourceImageView) {
         targetTemp = CGRectMake(window.center.x, window.center.y, 0, 0);
     } else {
-        targetTemp = photo.sourceFrame;
+        targetTemp = [self convertRect:photo.sourceImageView.frame fromView:photo.sourceImageView.superview];
     }
     
     self.window.windowLevel = UIWindowLevelNormal;//显示状态栏
     [UIView animateWithDuration:XJPhotoBrowserHideImageAnimationDuration animations:^{
-        if (CGRectIsEmpty(photo.sourceFrame)) {
-            self.tempView.alpha = 0;
-        } else {
+        if (photo.sourceImageView) {
             self.tempView.transform = CGAffineTransformInvert(self.transform);
             self.tempView.frame = targetTemp;
         }
+        self.tempView.alpha = 0;
         self.coverView.alpha = 0;
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
