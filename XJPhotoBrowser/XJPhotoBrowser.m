@@ -377,7 +377,7 @@
         CGFloat selfW = self.frame.size.width;
         CGFloat selfH = self.frame.size.height;
         
-        CGFloat placeHolderH = (placeImageSizeH * selfW)/placeImageSizeW;
+        CGFloat placeHolderH = placeImageSizeW?(placeImageSizeH * selfW)/placeImageSizeW:0;
         if (placeHolderH <= selfH) {
             targetTemp = CGRectMake(0, (selfH - placeHolderH) * 0.5 , selfW, placeHolderH);
         } else {//图片高度>屏幕高度
